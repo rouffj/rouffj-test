@@ -1,0 +1,14 @@
+{
+    "name": "rouffj/rouffj-test",
+    "description": "Project which experiment \"Learning By Automatic Testing\" concept",
+    "authors": [
+        {
+            "name": "Joseph Rouff",
+            "email": "rouffj@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-standard-edition": "v2.1.0-RC1"
+    },
+    "minimum-stability": "dev"
+}
