@@ -14,12 +14,12 @@ class TwigTest extends TestCase
         $this->twig->setLoader(new \Twig_Loader_String());
     }
 
-    public function testHowToUseFilterInlined()
+    public function testHowToApplyFilterOnOneLineString()
     {
         $this->assertEquals('STRING', $this->twig->render('{{ "string"|upper }}'));
     }
 
-    public function testHowToApplyFilterOnBigString()
+    public function testHowToApplyFilterOnMultipleLineString()
     {
         $this->assertEquals("MY BIG STRING\nON MULTIPLE LINES.", $this->twig->render(
 '{% filter upper%}my big string
