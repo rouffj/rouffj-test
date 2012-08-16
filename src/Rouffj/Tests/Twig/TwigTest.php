@@ -3,26 +3,23 @@
 namespace Rouffj\Tests\Twig;
 
 use Rouffj\Tests\TestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TwigTest extends WebTestCase
+class TwigTest extends TestCase
 {
-    private  $container = null;
     private  $twig = null;
 
-    public function setUp()
+    public function doSetUp()
     {
-        $this->container = $this->createClient()->getContainer();
         $this->twig = $this->container->get('twig');
         $this->twig->setLoader(new \Twig_Loader_String());
     }
 
-    public function testHowtoSetFilterInlined()
+    public function testHowToUseFilterInlined()
     {
         $this->assertEquals('STRING', $this->twig->render('{{ "string"|upper }}'));
     }
 
-    public function testHowtoApplyFilterOnBigString()
+    public function testHowToApplyFilterOnBigString()
     {
         $this->assertEquals("MY BIG STRING\nON MULTIPLE LINES.", $this->twig->render(
 '{% filter upper%}my big string
@@ -30,7 +27,7 @@ on multiple lines.{% endfilter %}'
         ));
     }
 
-    public function testHowtoChainFilters()
+    public function testHowToChainFilters()
     {
         // inlined chain
         $this->assertEquals('String', $this->twig->render('{{ "string"|upper|capitalize }}'));
@@ -38,7 +35,7 @@ on multiple lines.{% endfilter %}'
         $this->assertEquals('My big string', $this->twig->render('{% filter upper|capitalize %}mY bIg sTring{% endfilter %}'));
     }
 
-    public function testHowtoDisableAutoEscaping()
+    public function testHowToDisableAutoEscaping()
     {
         $this->assertEquals('&lt;p&gt;my HTML&lt;/p&gt;', $this->twig->render('{% set var = "<p>my HTML</p>"%}{{ var }}'),
             'By default autoescaping is enabled'
@@ -54,7 +51,7 @@ on multiple lines.{% endfilter %}'
         $this->assertEquals('<p>my HTML</p>', $this->twig->render('{% set var = "<p>my HTML</p>"%}{{ var }}'));
     }
 
-    public function testHowtoConcatenateThings()
+    public function testHowToConcatenateThings()
     {
         // use concatenate operator ~
         $this->assertEquals('str1str2', $this->twig->render('{{ "str1"~"str2" }}'));
@@ -64,7 +61,7 @@ on multiple lines.{% endfilter %}'
         $this->assertEquals('str1str2', $this->twig->render('{{ "str1str#{var+1}"}}', array('var' => 1)));
     }
 
-    public function testHowtoMixPHPWithTwigTemplate()
+    public function testHowToMixPhpWithTwigTemplate()
     {
         // When PHP snippet is written in Twig template, the php is not interpreted
         $this->assertEquals('<?php echo 1 ?> twig', $this->twig->render('<?php echo 1 ?> {{ "twig" }}'));
