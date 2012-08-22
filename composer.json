@@ -7,8 +7,5 @@
             "email": "rouffj@gmail.com"
         }
     ],
-    "require": {
-        "symfony/framework-standard-edition": "v2.1.0-RC1"
-    },
     "minimum-stability": "dev"
 }
