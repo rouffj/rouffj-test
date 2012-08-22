@@ -7,7 +7,7 @@ INSTALL
 -------
 
 * git clone https://github.com/rouffj/rouffj-test.git
-* make install
+* cd rouffj-test && make install
 * remplace ligne `"psr-0": { "": "src/" }' by '"psr-0": { "": ["../src", "src/"] }` in `framework-standard-edition/composer.json`
 * add `new Rouffj\Bundle\LearningBundle\RouffjLearningBundle()` to `framework-standard-edition/app/AppKernel.php`
 * update composer autoloader : `cd framework-standard-edition/ && composer.phar install`
