@@ -13,6 +13,8 @@ class RoutingTest extends TestCase
 {
     public function doSetUp()
     {
+        // disable caching of routes in app/cache dir
+        $this->container->get('router')->setOptions(array('cache_dir' => null));
     }
 
     public function testHowToCreateSimpleRoute()
@@ -57,13 +59,21 @@ class RoutingTest extends TestCase
         $router = $this->container->get('router');
         $collection = new RouteCollection();
         $collection->add('routeA', new Route('/routeA'), array(), array('_scheme' => 'http'));
-        $collection->add('routeB', new Route('/routeB', array(), array('_scheme' => 'https')));
         $router->setCollection($collection);
 
         // ->generate() by default ALWAYS generates a path
         $this->assertEquals('/routeA', $router->generate('routeA'));
         // ->generate() generates ONLY a full URL by passing the third param as true
         $this->assertEquals('http://localhost/routeA', $router->generate('routeA', array(), true));
+    }
+
+    public function testHowToForceScheme()
+    {
+        $router = $this->container->get('router');
+        $collection = new RouteCollection();
+        $collection->add('routeA', new Route('/routeA'), array(), array('_scheme' => 'http'));
+        $collection->add('routeB', new Route('/routeB', array(), array('_scheme' => 'https')));
+        $router->setCollection($collection);
 
         // WARNING: There is ONLY one case where without passing the third argument the router generate an URL, when the current
         // scheme is different from the target route (http -> https).
