@@ -11,3 +11,4 @@ INSTALL
 * remplace ligne `"psr-0": { "": "src/" }' by '"psr-0": { "": ["../src", "src/"] }` in `framework-standard-edition/composer.json`
 * add `new Rouffj\Bundle\LearningBundle\RouffjLearningBundle()` to `framework-standard-edition/app/AppKernel.php`
 * update composer autoloader : `cd framework-standard-edition/ && composer.phar install`
+* put into framework-standard-edition/app/config.yml `- { resource: @RouffjLearningBundle/Resources/config/config.yml}`

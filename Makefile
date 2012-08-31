@@ -1,4 +1,4 @@
-APP_ROOT=framework-standard-edition
+APP_ROOT=../framework-standard-edition
 PHPUNIT_OPTS="--testdox"
 
 test:

@@ -18,14 +18,36 @@ class RoutingTest extends TestCase
     public function testHowToCreateSimpleRoute()
     {
         $collection = new RouteCollection();
-        $collection->add('blog_show', new Route('/test', array(
+        $collection->add('blog_show', new Route('/test1', array(
             '_controller' => 'MyClassActingAsRooter',
         )));
-
         $this->container->get('router')->setCollection($collection);
+
+        var_dump($this->container->get('router')->match('/test'));
         $this->assertEquals(array('_controller' => 'MyClassActingAsRooter', '_route' => 'blog_show'),
-            $this->container->get('router')->match('/test')
+            $this->container->get('router')->match('/test1')
         );
+    }
+
+    public function testHowToPointRouteToMethodWithoutActionSuffix()
+    {
+        //$collection = new RouteCollection();
+        //$collection->add('blog_show1', new Route('/testt', array(
+        //    '_controller' => 'MyClassActingAsRooter',
+        //)));
+        //$this->container->get('router')->setCollection($collection);
+
+        //var_dump($this->container->get('router')->match('/testt'));die;
+        //$router = $this->container->get('router');
+        //$collection = new RouteCollection();
+        //$collection->add('route_a', new Route('/test1'), array(), array('_scheme' => 'http'));
+        //$collection->add('route_b', new Route('/test2', array(), array('_scheme' => 'https')));
+        //$router->setCollection($collection);
+
+        //$crawler = $this->client->request('GET', '/routeA');
+        var_dump($this->container->get('router')->match('/test1'));
+        //echo '<pre>'; var_dump($this->client->getContainer()->get('router')->getRouteCollection()); echo '</pre>'; die();
+        //var_dump($this->client->getResponse());
     }
 
     public function testHowToGeneratePathOrUrl()

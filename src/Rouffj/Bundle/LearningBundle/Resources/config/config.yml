@@ -1,0 +1,8 @@
+imports:
+    - { resource: parameters.yml }
+
+#doctrine:
+#    orm:
+#        mapping:
+#            name: 'RouffjLearningBundle'
+#            #prefix: 'Rouffj\Tests\Doctrine\Fixture'
