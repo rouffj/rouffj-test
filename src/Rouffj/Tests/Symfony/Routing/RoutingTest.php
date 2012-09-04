@@ -20,24 +20,23 @@ class RoutingTest extends TestCase
     public function testHowToCreateSimpleRoute()
     {
         $collection = new RouteCollection();
-        $collection->add('blog_show', new Route('/test1', array(
+        $collection->add('routeA', new Route('/routeA', array(
             '_controller' => 'MyClassActingAsRooter',
         )));
         $this->container->get('router')->setCollection($collection);
 
-        var_dump($this->container->get('router')->match('/test'));
-        $this->assertEquals(array('_controller' => 'MyClassActingAsRooter', '_route' => 'blog_show'),
-            $this->container->get('router')->match('/test1')
+        $this->assertEquals(array('_controller' => 'MyClassActingAsRooter', '_route' => 'routeA'),
+            $this->container->get('router')->match('/routeA')
         );
     }
 
     public function testHowToPointRouteToMethodWithoutActionSuffix()
     {
-        //$collection = new RouteCollection();
-        //$collection->add('blog_show1', new Route('/testt', array(
-        //    '_controller' => 'MyClassActingAsRooter',
-        //)));
-        //$this->container->get('router')->setCollection($collection);
+        $collection = new RouteCollection();
+        $collection->add('blog_show', new Route('/testt', array(
+            '_controller' => 'MyClassActingAsRooter',
+        )));
+        $this->container->get('router')->setCollection($collection);
 
         //var_dump($this->container->get('router')->match('/testt'));die;
         //$router = $this->container->get('router');
@@ -47,7 +46,7 @@ class RoutingTest extends TestCase
         //$router->setCollection($collection);
 
         //$crawler = $this->client->request('GET', '/routeA');
-        var_dump($this->container->get('router')->match('/test1'));
+        //var_dump($this->container->get('router')->match('/test1'));
         //echo '<pre>'; var_dump($this->client->getContainer()->get('router')->getRouteCollection()); echo '</pre>'; die();
         //var_dump($this->client->getResponse());
     }

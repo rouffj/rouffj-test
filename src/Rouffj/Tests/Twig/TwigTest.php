@@ -9,8 +9,8 @@ class TwigTest extends TestCase
     private  $twig = null;
 
     private $templates = array(
-        'tpl1' => '{% block nb1 %}block body 1{% endblock%}{% block nb2 %}block body 2{% endblock %}',
-        'tpl2' => '{% extends "tpl1"%} {% block nb1 %}{{ parent() }} block child body 1{% endblock%}',
+        'tpl1.html.twig' => '{% block nb1 %}block body 1{% endblock%}{% block nb2 %}block body 2{% endblock %}',
+        'tpl2.html.twig' => '{% extends "tpl1.html.twig" %} {% block nb1 %}{{ parent() }} block child body 1{% endblock%}',
     );
 
     public function doSetUp()
@@ -76,23 +76,22 @@ on multiple lines.{% endfilter %}'
     {
         $this->twig->setLoader(new \Twig_Loader_Array($this->templates));
 
-        $tpl = $this->container->get('twig')->loadTemplate('tpl1');
+        $tpl = $this->container->get('twig')->loadTemplate('tpl1.html.twig');
         $this->assertEquals('block body 1', $tpl->renderBlock('nb1', array()));
         $this->assertEquals('block body 2', $tpl->renderBlock('nb2', array()));
 
-        $tpl = $this->container->get('twig')->loadTemplate('tpl2');
+        $tpl = $this->container->get('twig')->loadTemplate('tpl2.html.twig');
         // by default renderBlock renders parent block if exists
         $this->assertEquals('block body 1 block child body 1', $tpl->renderBlock('nb1', array()));
         // renderParentBlock allow to render only the parent of the current block
         $this->assertEquals('block body 1', $tpl->renderParentBlock('nb1', array()));
-
     }
 
     public function testHowToKnowBlocksAvailableFromTemplate()
     {
         $this->twig->setLoader(new \Twig_Loader_Array($this->templates));
 
-        $tpl = $this->container->get('twig')->loadTemplate('tpl1');
+        $tpl = $this->container->get('twig')->loadTemplate('tpl1.html.twig');
 
         // enumerates all block names from template
         $this->assertEquals(array('nb1', 'nb2'), $tpl->getBlockNames());
