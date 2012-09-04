@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="service_a.class">Rouffj\Tests\Symfony\DI\Fixtures\ServiceA</parameter>
+        <parameter key="service_b.class">Rouffj\Tests\Symfony\DI\Fixtures\ServiceB</parameter>
+        <parameter key="service_d.class">Rouffj\Tests\Symfony\DI\Fixtures\ServiceD</parameter>
+        <parameter key="option1">value_option1</parameter>
+        <parameter key="option2">value_option2</parameter>
+    </parameters>
+    <services>
+        <service id="service_a" class="%service_a.class%">
+            <argument type="service" id="service_b" />
+            <!-- on-invalid with ignore allow to not throw excepion of "service_c" does not exists. It is usefull for OPTIONAL references -->
+            <argument type="collection">
+                <argument>%option1%</argument>
+                <argument key="key_option2">%option2%</argument>
+            </argument>
+            <argument type="service" id="service_c" on-invalid="ignore" />
+            <call method="setServiceD">
+                <argument type="service" id="service_d" />
+            </call>
+        </service>
+
+        <service id="service_b" class="%service_b.class%" />
+        <service id="service_d" class="%service_d.class%" />
+    </services>
+</container>
+
