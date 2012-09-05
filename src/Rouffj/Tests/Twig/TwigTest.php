@@ -16,6 +16,7 @@ class TwigTest extends TestCase
     public function doSetUp()
     {
         $this->twig = $this->container->get('twig');
+        $this->twig->setCache(false);
         $this->twig->setLoader(new \Twig_Loader_String());
     }
 
@@ -51,9 +52,14 @@ on multiple lines.{% endfilter %}'
         $this->assertEquals('<p>my HTML</p>', $this->twig->render('{% set var = "<p>my HTML</p>"%}{{ var|raw }}'));
 
         // Autoescaping can be disabled globally
-        $this->markTestIncomplete('removing escaper extension does not disable autoescaping');
+        //   1) By set escaper strategy to false
+        $this->twig->getExtension('escaper')->setDefaultStrategy(false);
+        $this->assertEquals('<p>1</p>', $this->twig->render('{% set var = "<p>1</p>"%}{{ var }}'));
+
+        //   2) By removing the extension
+        $this->twig->getExtension('escaper')->setDefaultStrategy('html');
         $this->twig->removeExtension('escaper');
-        $this->assertEquals('<p>my HTML</p>', $this->twig->render('{% set var = "<p>my HTML</p>"%}{{ var }}'));
+        $this->assertEquals('<p>2</p>', $this->twig->render('{% set var = "<p>2</p>"%}{{ var }}'));
     }
 
     public function testHowToConcatenateThings()
