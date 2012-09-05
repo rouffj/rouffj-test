@@ -26,7 +26,9 @@
         </service>
 
         <service id="service_b" class="%service_b.class%" />
-        <service id="service_d" class="%service_d.class%" />
+        <service id="service_d" class="%service_d.class%">
+            <file>%kernel.root_dir%/../../src/Rouffj/Tests/Symfony/DI/Fixtures/legacy_file.php</file>
+        </service>
     </services>
 </container>
 

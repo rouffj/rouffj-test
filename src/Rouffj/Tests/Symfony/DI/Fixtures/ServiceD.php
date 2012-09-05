@@ -9,4 +9,12 @@ class ServiceD
     function __construct()
     {
     }
+
+    public function getResult()
+    {
+        $resultA = legacy_functionA();
+        $resultB = legacy_functionB();
+
+        return $resultA + $resultB;
+    }
 }
