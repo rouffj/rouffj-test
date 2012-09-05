@@ -70,4 +70,13 @@ class DITest extends TestCase
         $this->assertEquals(10, $this->customContainer->get('service_d')->getResult());
         $this->assertEquals(10, legacy_functionA() + legacy_functionB(), 'after a service requires a files with regular functions, they becomes accessible globally :(');
     }
+
+    /**
+     * For me the configurator is acting like the <call> but we can use it for heavy initialization procedure
+     */
+    public function testHowToUseConfigurator()
+    {
+        $this->assertEquals(1, $this->customContainer->get('service_d')->varA);
+        $this->assertEquals(2, $this->customContainer->get('service_d')->varB);
+    }
 }

@@ -6,6 +6,9 @@ namespace Rouffj\Tests\Symfony\DI\Fixtures;
  */
 class ServiceD
 {
+    public $varA;
+    public $varB;
+
     function __construct()
     {
     }
@@ -16,5 +19,16 @@ class ServiceD
         $resultB = legacy_functionB();
 
         return $resultA + $resultB;
+    }
+
+    static public function configure(ServiceD $instance)
+    {
+        $instance->initService();
+    }
+
+    public function initService()
+    {
+        $this->varA = 1;
+        $this->varB = 2;
     }
 }
