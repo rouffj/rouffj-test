@@ -15,7 +15,7 @@ class DITest extends TestCase
         $this->customContainer = new ContainerBuilder();
         $xmlLoader = new XmlFileLoader($this->customContainer, new FileLocator(array(__DIR__.'/Fixtures')));
         $xmlLoader->load('services.xml');
-        $this->customContainer->setParameter('kernel.root_dir', $this->container->getParameter('kernel.root_dir'));
+        $this->customContainer->setParameter('src_dir', $this->container->getParameter('src_dir'));
     }
 
     public function testHowToAddServiceInContainer()

@@ -13,3 +13,4 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+    src_dir:           %kernel.root_dir%/../../rouffj-test
