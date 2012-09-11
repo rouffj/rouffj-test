@@ -5,7 +5,9 @@ namespace Rouffj\Tests\Doctrine;
 use Doctrine\ORM\UnitOfWork;
 
 use Rouffj\Tests\TestCase;
+
 use Rouffj\Bundle\LearningBundle\Entity\Employee;
+use Rouffj\Bundle\LearningBundle\Entity\Department;
 
 class DoctrineTest extends TestCase
 {
@@ -78,6 +80,68 @@ class DoctrineTest extends TestCase
         $this->em->clear('Rouffj\Bundle\LearningBundle\Entity\Employee');
         $o2 = $this->em->getRepository('RouffjLearningBundle:Employee')->findOneByLastname('Smith');
         $this->assertNotSame($o1, $o2, '->clear() allow to retrieve $o1 and $o2 from DB');
+    }
+
+    public function testFindOneBy()
+    {
+        $em = $this->container->get('doctrine')->getEntityManager();
+        $empRepository = $em->getRepository('RouffjLearningBundle:Employee');
+        $d1 = new Department('Engineering');
+        $d2 = new Department('Sales');
+        $emp1 = $empRepository->findOneByLastname('Smith');
+        $emp2 = $empRepository->findOneByLastname('John');
+
+        $d1->addEmployee($emp1);
+        $d1->addEmployee($emp2);
+
+        $em->persist($d2);
+        $em->persist($d1);
+        $em->flush();
+
+
+        //$department = $em->createQuery('
+        //    SELECT d, e
+        //    FROM
+        //        RouffjLearningBundle:Department d 
+        //        INNER JOIN d.employees e 
+        //    WHERE 
+        //        d.name=:dept
+        //')->setParameter('dept', 'Engineering')->getOneOrNullResult();
+
+        //$this->assertEquals(array($emp1, $emp2), $department->getEmployees()->toArray());
+
+        //$department = $em->createQuery('
+        //    SELECT d, e
+        //    FROM
+        //        RouffjLearningBundle:Department d 
+        //        LEFT JOIN d.employees e 
+        //    WHERE 
+        //        d.name=:dept
+        //')->setParameter('dept', 'Sales')->getOneOrNullResult();
+
+        //$this->assertEquals(array(), $department->getEmployees()->toArray());
+
+        $department = $em->createQuery('
+            SELECT d, e
+            FROM
+                RouffjLearningBundle:Department d 
+                INNER JOIN d.employees e 
+            WHERE 
+                d.name=:dept
+        ')->setParameter('dept', 'Engineering')->getOneOrNullResult();
+
+        $this->assertEquals(array($emp1, $emp2), $department->getEmployees()->toArray());
+
+        $department = $em->createQuery('
+            SELECT d, e
+            FROM
+                RouffjLearningBundle:Department d 
+                INNER JOIN d.employees e 
+            WHERE d.name =:dept
+                AND e = :emp
+        ')->setParameters(array('dept' => 'Engineering', 'emp' => $emp1))->getOneOrNullResult();
+
+        $this->assertEquals(array($emp1), $department->getEmployees()->toArray());
     }
 
     private function createEmployees($employees)

@@ -22,10 +22,19 @@ class Employee
      */
     private $lastname;
 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Department", inversedBy="employees")
+     */
     private $department;
 
     public function __construct($lastname)
     {
         $this->lastname = $lastname;
+    }
+
+    public function setDepartement(Department $dept)
+    {
+        $this->department = $dept;
     }
 }
