@@ -72,6 +72,11 @@ on multiple lines.{% endfilter %}'
         $this->assertEquals('str1str2', $this->twig->render('{{ "str1str#{var+1}"}}', array('var' => 1)));
     }
 
+    public function testHowToSumTwoNumbersInString()
+    {
+        $this->assertEquals('Symfony 2.1', $this->twig->render('{{ "Symfony #{2.0 + 0.1}"  }}'));
+    }
+
     public function testHowToMixPhpWithTwigTemplate()
     {
         // When PHP snippet is written in Twig template, the php is not interpreted
@@ -105,5 +110,38 @@ on multiple lines.{% endfilter %}'
         // check if a block with given name exists
         $this->assertEquals(true, $tpl->hasBlock('nb1'));
         $this->assertEquals(false, $tpl->hasBlock('nb6'));
+    }
+
+    public function testHowToAccessAppVariableFromTemplate()
+    {
+        $this->assertEquals(array('assetic'), array_keys($this->container->get('twig')->getGlobals()), 'no app variable exists without one call to "templating" service');
+        $this->container->get('templating');
+        $globals = $this->container->get('twig')->getGlobals();
+        $this->assertEquals(array('app', 'assetic'), array_keys($globals), 'after "templating" call the "app" is available');
+        $this->assertEquals('Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables', get_class($globals['app']));
+        $this->assertEquals('', $this->twig->render('{{ app.user }}'));
+
+        return $globals['app'];
+    }
+
+    /**
+     * @depends testHowToAccessAppVariableFromTemplate
+     */
+    public function testHowToAccessSymfonyEnvironmentFromTemplate($app)
+    {
+        $this->assertEquals('test', $app->getEnvironment(), 'should be app.environment in twig');
+    }
+
+    /**
+     * The twig "replace" filter use behind the scene the strtr PHP function
+     */
+    public function testHowToUseReplaceFilter()
+    {
+        $string = 'I like %this% and %that%.';
+        $this->assertEquals(
+            strtr($string, array('%this%' => 'foo', '%that%' => 'bar')),
+            $this->twig->render('{{ string|replace({"%this%": "foo", "%that%": "bar"})  }}', array('string' => $string)),
+            'use a "replace" filter is equivalent to "strtr" PHP function'
+        );
     }
 }
