@@ -19,6 +19,14 @@ class OpenCloseTest extends TestCase
     /**
      * This can be particularly useful in SOAP/DB context when we have 2 domain models
      * which diverges.
+     *
+     * Limitations:
+     * - This design suppose that the main change axis is ONLY the increasing number of objets
+     *   to convert (SoapModel <-> DbModel).
+     * - If we have have to add regularly new model type (Soap, Db, Rest, Github...) with the actual
+     *   design we have to alter each converter by adding the new type to supports() method + adding
+     *   constant + add new else if. So it is not optimal if we add often new model type but is suffiscient
+     *   if it is very exceptional.
      */
     public function testHowToBuildObjectConverterAvoidingIfs()
     {
