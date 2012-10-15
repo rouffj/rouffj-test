@@ -10,6 +10,10 @@ use Rouffj\Tests\TestCase;
 require_once __DIR__.'/Fixtures/ObjectConverter.php';
 use Rouffj\Tests\OOP\Fixtures;
 
+/**
+ * To apply correctly the open close principle, you have to ask to your product owner
+ * what will be the axes of change
+ */
 class OpenCloseTest extends TestCase
 {
     public function doSetUp()
@@ -21,8 +25,11 @@ class OpenCloseTest extends TestCase
      * which diverges.
      *
      * Limitations:
-     * - This design suppose that the main change axis is ONLY the increasing number of objets
-     *   to convert (SoapModel <-> DbModel).
+     * - This design supposes that the main change axis is ONLY the increasing number of objets
+     *   to convert (SoapModel <-> DbModel). The ModelConverter is CLOSED for ALTERATION for
+     *   this axe of changes because we have no longer need to alter the ModelConverter but OPENED
+     *   for EXTENSION because just creating a new Converter will be handled by ModelConverter because
+     *   it iterates over all existing converters.
      * - If we have have to add regularly new model type (Soap, Db, Rest, Github...) with the actual
      *   design we have to alter each converter by adding the new type to supports() method + adding
      *   constant + add new else if. So it is not optimal if we add often new model type but is suffiscient
