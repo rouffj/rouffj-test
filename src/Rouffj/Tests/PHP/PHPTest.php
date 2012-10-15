@@ -10,6 +10,19 @@ class PHPTest extends TestCase
     {
     }
 
+    /**
+     * @link: http://stackoverflow.com/questions/3797239/php-array-insert-new-item-in-any-position
+     */
+    public function testHowToInsertIntoArrayNewItemInAnyPosition()
+    {
+        $original = array( 'a','b','c','d','e' );
+        $expected = array('a', 'b', 'c', 'x', 'd', 'e');
+        $inserted = array( 'x' );
+        $removedItems = array_splice($original, 3, 0, $inserted);
+        $this->assertEquals($expected, $original);
+        $this->assertEquals(array(), $removedItems, 'expected is empty array because no item is removed (third param contains 0)');
+    }
+
     public function testHowToChangeErrorMessagesIntoCatchableException()
     {
         // We are restoring the default PHP error handler, because Symfony defines its own.
