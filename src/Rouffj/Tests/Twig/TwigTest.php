@@ -11,6 +11,8 @@ class TwigTest extends TestCase
     private $templates = array(
         'tpl1.html.twig' => '{% block nb1 %}block body 1{% endblock%}{% block nb2 %}block body 2{% endblock %}',
         'tpl2.html.twig' => '{% extends "tpl1.html.twig" %} {% block nb1 %}{{ parent() }} block child body 1{% endblock%}',
+        'tpl3.html.twig' => '{% set var1 = "bar" %}{% if (1 == 1) %} {% set var2 = "test" %} {% endif %}{% block nb1 %}block body 1{% endblock%}{% macro macro1() %}test{% endmacro%}{% include "tpl4.html.twig" %}',
+        'tpl4.html.twig' => '{% set var3 = "barss" %}',
     );
 
     public function doSetUp()
@@ -143,5 +145,54 @@ on multiple lines.{% endfilter %}'
             $this->twig->render('{{ string|replace({"%this%": "foo", "%that%": "bar"})  }}', array('string' => $string)),
             'use a "replace" filter is equivalent to "strtr" PHP function'
         );
+    }
+
+    public function testHowToTransformTwigTemplateIntoAST()
+    {
+        $stream = $this->twig->tokenize($this->templates['tpl3.html.twig'], 'tpl3.html.twig');
+        // this single line allow to transform a stream of token into a Tree of nodes (AST).
+        $nodes = $this->twig->parse($stream);
+
+        //echo $nodes;
+        $this->assertInstanceOf('Twig_Node_Module', $nodes);
+
+        $this->assertEquals('tpl3.html.twig', $nodes->getAttribute('filename'));
+        $this->assertInstanceOf('Twig_Node_Body', $nodes->getNode('body'));
+        $this->assertEquals(null, $nodes->getNode('parent'), 'A Twig template could have a body OR a parent, but not either.');
+        $this->assertInstanceOf('Twig_Node', $nodes->getNode('blocks'));
+        $this->assertInstanceOf('Twig_Node', $nodes->getNode('macros'));
+        //echo $nodes;
+        // Allow to retrieve 
+        $this->assertInstanceOf('Twig_Node_Body', $nodes->getNode('blocks')->getNode('nb1'));
+        $this->assertInstanceOf('Twig_Node_Macro', $nodes->getNode('macros')->getNode('macro1'));
+    }
+
+    public function testHowToCountTheNumberOfNodeMadeInASingleTemplate()
+    {
+        $stream = $this->twig->tokenize($this->templates['tpl3.html.twig']);
+        $nodes = $this->twig->parse($stream);
+        $entryBody = $nodes->getNode('body');
+        $nbSets = 0;
+        $this->foundSetNodes($entryBody, $nbSets, '\Twig_Node_Set');
+
+        $this->assertEquals(2, $nbSets);
+    }
+
+    private function foundSetNodes($node, &$nbSets, $nodeType)
+    {
+        if ($node === null) {
+            return;
+        }
+
+        if ($node instanceof $nodeType) {
+            $nbSets += 1;
+        }
+
+        // code which activate the recursivity
+        if ($node->count() > 0) {
+            foreach ($node as $n) {
+                $this->foundSetNodes($n, $nbSets, $nodeType);
+            }
+        }
     }
 }

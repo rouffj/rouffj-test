@@ -14,6 +14,29 @@ class FinderTest extends TestCase
         $this->fixtures = __DIR__.'/Fixtures';
     }
 
+    public function testHowToListSpecificFilesInDifferentDirectories()
+    {
+        $files = array('Dir1/file1-1.php', 'file1.php');
+
+        // 1st solution, do exactly the job.
+        $iterator = Finder::create()
+            ->files()
+            ->in($this->fixtures)
+            ->filter(function (\SplFileInfo $file) use ($files) {
+                // filter() closure should return false to remove a file from result
+                return in_array($file->getRelativePathname(), $files);
+            });
+        $this->assertEquals(2, count($iterator), 'search all files with a relative pathname matching the $files entries');
+
+        // 2nd solution, do the job but is not perfect because if 2 files have the names they will be return either.
+        $iterator = Finder::create()
+            ->files()
+            ->name($files[0])
+            ->name($files[1])
+            ->in($this->fixtures);
+        $this->assertCount(2, $iterator, 'search recursively all files named file1-1.php and file1.php');
+    }
+
     public function testHowToListPhpFilesInSubdirectories()
     {
         $finder = new Finder();

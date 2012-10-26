@@ -46,6 +46,22 @@ class PHPTest extends TestCase
         } catch (\ErrorException $e) {
         }
     }
+
+    public function testHowToKnowIfADateIsDuringWinterTime()
+    {
+        $winterTime = 0;
+        $summerTime = 1;
+        $tz = new \DateTimeZone('Europe/Paris');
+        $oct26 = new \DateTime('2012-10-26 00:00', $tz);
+        $oct28_1h = new \DateTime('2012-10-28 01:59', $tz);
+        $oct28_2h = new \DateTime('2012-10-28 02:00', $tz);
+        $dec25 = new \DateTime('2012-12-25 00:00', $tz);
+
+        $this->assertEquals($summerTime, $oct26->format('I'));
+        $this->assertEquals($summerTime, $oct28_1h->format('I'));
+        $this->assertEquals($winterTime, $oct28_2h->format('I'));
+        $this->assertEquals($winterTime, $dec25->format('I'));
+    }
 }
 
 
