@@ -1,0 +1,6 @@
+route1:
+    pattern: /foo
+
+route2:
+    defaults: { controller: 'MyController::fooAction' }
+

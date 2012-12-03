@@ -62,6 +62,28 @@ class PHPTest extends TestCase
         $this->assertEquals($winterTime, $oct28_2h->format('I'));
         $this->assertEquals($winterTime, $dec25->format('I'));
     }
+
+    public function testHowToReplaceCompleteSubtringFromString()
+    {
+        $this->assertEquals('Hello John Carter !!', strtr('Hello Joseph Rouff !!', array('Joseph Rouff' => 'John Carter')));
+    }
+
+    /**
+     * usecases:
+     * - Retrieve the variable parts of an exception message (eg: the file "Dir/foo.php" is not valid)
+     *
+     * @link http://stackoverflow.com/questions/413071/regex-to-get-string-between-curly-braces-i-want-whats-between-the-curly-brace#answer-413077
+     */
+    public function testHowToGetStringBetweenDelimiters()
+    {
+        $matches = array();
+
+        $msg = 'Cannot import resource "src/MyBundle/routes.yml" from "app/config/routing.yml"';
+        preg_match_all('/"(.*?)"/', $msg, $matches);
+        list($importedFile, $originalFile) = $matches[1];
+        $this->assertEquals('src/MyBundle/routes.yml', $importedFile);
+        $this->assertEquals('app/config/routing.yml', $originalFile);
+    }
 }
 
 

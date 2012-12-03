@@ -1,0 +1,9 @@
+route1:
+    pattern: /foo
+    defaults: { }
+    requirements: {}
+    options:
+    type:
+    resource:
+    prefix:
+    notAvailableKey:

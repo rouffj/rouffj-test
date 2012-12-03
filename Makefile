@@ -2,7 +2,7 @@ APP_ROOT=framework-standard-edition
 PHPUNIT_OPTS="--testdox"
 
 test:
-	@phpunit $(PHPUNIT_OPTS) -c $(APP_ROOT)/app/phpunit.xml.dist
+	@phpunit.phar $(PHPUNIT_OPTS) -c $(APP_ROOT)/app/phpunit.xml.dist
 
 install:
 	composer.phar install

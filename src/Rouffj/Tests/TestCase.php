@@ -11,7 +11,7 @@ abstract class TestCase extends WebTestCase
 
     public function setUp()
     {
-        $this->client = $this->createClient();
+        $this->client = static::createClient();
         $this->container = $this->client->getContainer();
         $this->doSetup();
     }
