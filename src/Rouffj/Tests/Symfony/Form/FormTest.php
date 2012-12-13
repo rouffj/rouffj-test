@@ -33,4 +33,18 @@ class FormTest extends TestCase
             'As $defaultData given to createBuilder() is an array, $form->getData() returns an array'
         );
     }
+
+    /**
+     * By default the Form component set/get data in field name, if you say a field
+     * name is "title" it will use setTitle/getTitle.
+     */
+    public function testHowToHandleCustomizedGetterSetter()
+    {
+        $form = $this->container->get('form.factory')->createBuilder('form', array('full_name' => 'Joseph Rouff'), array())
+            ->add('name', null, array('property_path' => '[full_name]')) // [...] notation is only for array, if it is an object "fullName" is enough.
+            ->getForm();
+        ;
+
+        $this->assertEquals('Joseph Rouff', $form->get('name')->getData());
+    }
 }
