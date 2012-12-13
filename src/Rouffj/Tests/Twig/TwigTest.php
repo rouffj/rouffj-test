@@ -112,18 +112,6 @@ on multiple lines.{% endfilter %}'
         $this->assertEquals(false, $tpl->hasBlock('nb6'));
     }
 
-    public function testHowToAccessAppVariableFromTemplate()
-    {
-        $this->assertEquals(array('assetic'), array_keys($this->container->get('twig')->getGlobals()), 'no app variable exists without one call to "templating" service');
-        $this->container->get('templating');
-        $globals = $this->container->get('twig')->getGlobals();
-        $this->assertEquals(array('app', 'assetic'), array_keys($globals), 'after "templating" call the "app" is available');
-        $this->assertEquals('Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables', get_class($globals['app']));
-        $this->assertEquals('', $this->twig->render('{{ app.user }}'));
-
-        return $globals['app'];
-    }
-
     /**
      * @depends testHowToAccessAppVariableFromTemplate
      */
@@ -143,5 +131,24 @@ on multiple lines.{% endfilter %}'
             $this->twig->render('{{ string|replace({"%this%": "foo", "%that%": "bar"})  }}', array('string' => $string)),
             'use a "replace" filter is equivalent to "strtr" PHP function'
         );
+    }
+
+    public function testHowToUseLoopVariable()
+    {
+        // How to access parent loop
+        $twig =<<<TEST
+{% for item in 0..1 %}
+{% for item in 0..2 %}{{ loop.parent.loop.index0 }}.{{ loop.index0 }}|{% endfor %}
+{% endfor %}
+TEST;
+        $this->assertEquals('0.0|0.1|0.2|1.0|1.1|1.2|', $this->twig->render($twig), 'to access parent loop info we have to check loop.parent.loop, not directly loop.parent');
+
+        // How to check if the current iteration if the first or the last ?
+        $twig =<<<TEST
+{% for item in 0..2 %}
+{% if loop.first%}{{loop.index0}}.{% endif %}{% if loop.last%}{{loop.index0}}{% endif %}
+{% endfor%}
+TEST;
+        $this->assertEquals('0.2', $this->twig->render($twig));
     }
 }
