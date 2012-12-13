@@ -1,6 +1,6 @@
 <?php
 
-namespace Rouffj\Tests\Symfony\Form;
+namespace Rouffj\Tests\Symfony\Routing;
 
 use Rouffj\Tests\TestCase;
 use Symfony\Component\Routing\RouteCollection;

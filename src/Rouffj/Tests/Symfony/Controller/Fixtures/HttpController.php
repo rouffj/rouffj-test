@@ -122,4 +122,21 @@ class HttpController extends Controller
     {
         return new Response(sprintf('forwardedAction.%s.%s.%s', $param1, $param2, $this->get('request')->query->get('query1')));
     }
+
+    /**
+     * @Route("/shortcuts")
+     * @link http://api.symfony.com/master/Symfony/Bundle/FrameworkBundle/Controller/Controller.html
+     */
+    public function shortcutsAction()
+    {
+        $request = $this->get('request');
+
+        $response = array(
+            'request' => get_class($this->getRequest()),
+            'doctrine' => get_class($this->getDoctrine()),
+            'not_found' => get_class($this->createNotFoundException()),
+        );
+
+        return new Response(json_encode($response));
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rouffj\Tests\Symfony\Form;
+namespace Rouffj\Tests\PhpUnit;
 
 //require __DIR__.'/Fixtures/embedded_instanciation.php';
 

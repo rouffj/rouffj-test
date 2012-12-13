@@ -1,6 +1,6 @@
 <?php
 
-namespace Rouffj\Tests\Symfony\OOP;
+namespace Rouffj\Tests\OOP;
 
 require_once __DIR__.'/Fixtures/tda_basic.php';
 

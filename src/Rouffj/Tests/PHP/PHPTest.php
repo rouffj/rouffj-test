@@ -1,6 +1,6 @@
 <?php
 
-namespace Rouffj\Tests\Symfony\Form;
+namespace Rouffj\Tests\PHP;
 
 use Rouffj\Tests\TestCase;
 

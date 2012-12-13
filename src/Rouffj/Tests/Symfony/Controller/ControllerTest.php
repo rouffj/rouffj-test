@@ -62,6 +62,16 @@ class ControllerTest extends TestCase
         $this->assertCount(1, $body['error_flashes'], 'Flashes are still present because FlashBag#peek does NOT delete flashes.');
     }
 
+    public function testHowToAccessControllerShortcuts()
+    {
+        $this->client->request('GET', '/controller/shortcuts');
+        $body = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertEquals('Symfony\Component\HttpFoundation\Request', $body['request']);
+        $this->assertEquals('Doctrine\Bundle\DoctrineBundle\Registry', $body['doctrine'], 'we should access to doctrine');
+        $this->assertEquals('Symfony\Component\HttpKernel\Exception\NotFoundHttpException', $body['not_found'], 'we should throw a not found exception without');
+    }
+
     public function testHowToGenerate404Page()
     {
         try {

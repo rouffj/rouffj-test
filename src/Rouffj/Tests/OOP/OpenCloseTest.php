@@ -1,6 +1,6 @@
 <?php
 
-namespace Rouffj\Tests\Symfony\OOP;
+namespace Rouffj\Tests\OOP;
 
 use Rouffj\Tests\TestCase;
 
