@@ -6,11 +6,11 @@
 
     <parameters>
         <parameter key="router.class">Rouffj\Bundle\LearningBundle\Routing\Router</parameter>
+        <parameter key="rouffj_learning.twig.learning_extension.class">Rouffj\Bundle\LearningBundle\Twig\Extension\LearningExtension</parameter>
     </parameters>
-    <!--
     <services>
-        <service id="rouffj_learning.example" class="%rouffj_learning.example.class%">
+        <service id="rouffj_learning.twig.learning_extension" class="%rouffj_learning.twig.learning_extension.class%">
+            <tag name="twig.extension" />
         </service>
     </services>
-    -->
 </container>

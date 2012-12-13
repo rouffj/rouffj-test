@@ -93,4 +93,17 @@ class ControllerTest extends TestCase
         $this->assertEquals(301, $this->client->getResponse()->getStatusCode(), 'To force permanent redirect we have to pass 301 as second param');
         $this->assertEquals(true, $this->client->getResponse()->isRedirection());
     }
+
+    /**
+     * - There 4 builtin info on Routing component (_route, _controller, _format, _locale)
+     */
+    public function testHowToAccessRouteInformationFromAction()
+    {
+        $this->client->request('GET', '/controller/routeInfo');
+        $body = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals('rouffj_tests_symfony_fixtures_routing_routeinfo', $body['_route'], 'route name');
+        $this->assertEquals('Rouffj\Tests\Symfony\Controller\Fixtures\RoutingController::routeInfoAction', $body['_controller'], 'raw value of _controller');
+        $this->assertEquals('html', $body['_format']);
+        $this->assertEquals('fr', $body['_locale']);
+    }
 }

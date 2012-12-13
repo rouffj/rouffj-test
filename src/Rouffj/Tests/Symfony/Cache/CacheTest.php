@@ -12,8 +12,8 @@ class CacheTest extends TestCase
 
     public function testTiti()
     {
-    #    $cli = static::createClient();
-    #    $crawler = $cli->request('GET', '/cache/test');
-    #    $this->assertGreaterThan(0, $crawler->filter('html:contains("Hello")'));
+        $cli = $this->client;
+        $crawler = $cli->request('GET', '/routeB');
+        $this->assertGreaterThan(0, $crawler->filter('html:contains("Hello world!")')->count());
     }
 }
