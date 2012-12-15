@@ -3,6 +3,8 @@
 namespace Rouffj\Tests\Twig;
 
 use Rouffj\Tests\TestCase;
+use Twig_Token;
+use Twig_Lexer;
 
 class InternalTest extends TestCase
 {
@@ -18,6 +20,33 @@ class InternalTest extends TestCase
         $this->twig = $this->container->get('twig');
         $this->twig->setCache(false);
         $this->twig->setLoader(new \Twig_Loader_String());
+    }
+
+    public function testHowToIgnoreUnregisteredTag()
+    {
+        $this->twig->addTokenParser(new MyTagTokenParser());
+        $tokenStream = $this->twig->tokenize("{{'Hello'}} {% mytag %} {% endmytag %}");
+        $this->twig->parse($tokenStream);
+    }
+
+    public function testHowIsWorkingTwigLexer()
+    {
+        $lexer = new Twig_Lexer($this->twig);
+
+        $tokenStream = $lexer->tokenize("{{'Hello'}}");
+        $this->assertEquals(new Twig_Token(Twig_Token::VAR_START_TYPE, '', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::STRING_TYPE, 'Hello', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::VAR_END_TYPE, '', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::EOF_TYPE, '', 1), $tokenStream->getCurrent());
+
+        $tokenStream = $lexer->tokenize("<html> {{  'world'}}</html>");
+        $this->assertEquals(new Twig_Token(Twig_Token::TEXT_TYPE, '<html> ', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::VAR_START_TYPE, '', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::STRING_TYPE, 'world', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::VAR_END_TYPE, '', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::TEXT_TYPE, '</html>', 1), $tokenStream->next());
+        $this->assertEquals(new Twig_Token(Twig_Token::EOF_TYPE, '', 1), $tokenStream->getCurrent());
+        //$tokenStream = $lexer->tokenize("{{'Hello'}}{% set test = 'sdf' %}");
     }
 
     public function testHowToTransformTwigTemplateIntoAst()
@@ -67,5 +96,27 @@ class InternalTest extends TestCase
                 $this->foundSetNodes($n, $nbSets, $nodeType);
             }
         }
+    }
+}
+
+class MyTagTokenParser extends \Twig_TokenParser
+{
+    public function parse(Twig_Token $token)
+    {
+        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+        $body = $this->parser->subparse(array($this, 'decideSpacelessEnd'), true);
+        $this->parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+
+        return new \Twig_Node_Spaceless($body, 0, $this->getTag());
+    }
+
+    public function decideSpacelessEnd(Twig_Token $token)
+    {
+        return $token->test('endmytag');
+    }
+
+    public function getTag()
+    {
+        return 'mytag';
     }
 }
