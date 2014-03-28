@@ -1,7 +1,7 @@
 This PHP repository experiment the "Learning By Automatic Test" concept.
 
 Instead of creating fake project to test libraries, technologies, frameworks etc. we use
-here Automatic test to experiment things.
+here Automatic test to experiment things..
 
 INSTALL
 -------
